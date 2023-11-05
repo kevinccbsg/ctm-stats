@@ -1,9 +1,54 @@
+import { useEffect, useState } from 'react';
+import { UserOutlined } from '@ant-design/icons';
 import styles from './Home.module.scss';
+import { allTimeHighScores } from '../../api';
+import { Avatar, List, Skeleton, Typography } from 'antd';
+
+interface Score {
+  id: number;
+  final_score: number | null;
+  game_link: string | null;
+  players: {
+    id: number;
+    name: string | null;
+    profile_picture_url: string | null;
+    twitch_url: string | null;
+  } | null;
+}
 
 const Homepage = () => {
+  const [scores, setScore] = useState<Score[]>([]);
+  useEffect(() => {
+    allTimeHighScores()
+      .then(data => {
+        console.log(data);
+        if (data) {
+          setScore(data);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
   return (
     <div className={styles.container}>
-      Home page
+      <List
+        loading={false}
+        itemLayout="horizontal"
+        dataSource={scores}
+        renderItem={(score) => (
+          <List.Item
+            actions={[<a href={score.game_link as string} target='blank' rel='noopener' key="youtube-link">Video</a>]}
+          >
+            <List.Item.Meta
+              avatar={<Avatar src={score.players?.profile_picture_url ? score.players.profile_picture_url : <UserOutlined />} />}
+              title={<Typography.Paragraph>{score.players?.name}</Typography.Paragraph>}
+              description={<Typography.Paragraph>{score.final_score}</Typography.Paragraph>}
+            />
+            <div>{score.final_score}</div>
+          </List.Item>
+        )}
+    />
     </div>
   );
 };

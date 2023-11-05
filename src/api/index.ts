@@ -1,10 +1,21 @@
 import { supabase } from '../supabase/client';
 
 export const allTimeHighScores = async () => {
-  const { data: session } = await supabase
+  const { data: games, error } = await supabase
     .from('tetris_games')
-    .select()
-    .order('final_score')
+    .select(`
+      id,
+      final_score,
+      game_link,
+      players (
+        id,
+        name,
+        profile_picture_url,
+        twitch_url
+      )
+    `)
+    .order('final_score', { ascending: false })
     .limit(10);
-
+  console.log(error);
+  return games;
 };
