@@ -1,0 +1,5 @@
+@use './colors.scss' as c;
+
+body {
+  background-color: c.$background;
+}

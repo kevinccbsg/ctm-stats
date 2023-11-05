@@ -6,6 +6,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended-type-checked',
     'plugin:react-hooks/recommended',
+    'plugin:react/jsx-runtime'
   ],
   parserOptions: {
     ecmaVersion: 'latest',
