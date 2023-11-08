@@ -1,8 +1,9 @@
+import { Avatar, Image, List, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { UserOutlined } from '@ant-design/icons';
+import { getScores, lifeTimeMaxouts, Scores } from '../../api';
+import logo from '../../assets/ctm_logo.png';
 import styles from './Home.module.scss';
-import { getScores, Scores } from '../../api';
-import { Avatar, List, Typography } from 'antd';
 
 interface Score {
   id: number;
@@ -19,7 +20,7 @@ interface Score {
 const Homepage = () => {
   const [scores, setScore] = useState<Score[]>([]);
   useEffect(() => {
-    getScores(Scores.TRANSITION_29_SCORE)
+    lifeTimeMaxouts()
       .then(data => {
       console.log(data);
       })
@@ -36,25 +37,31 @@ const Homepage = () => {
         console.log(error);
       });
   }, []);
-  return (
-    <div className={styles.container}>
-      <List
-        loading={false}
-        itemLayout="horizontal"
-        dataSource={scores}
-        renderItem={(score) => (
-          <List.Item
-            actions={[<a href={score.game_link as string} target='blank' rel='noopener' key="youtube-link">Video</a>]}
-          >
-            <List.Item.Meta
-              avatar={<Avatar src={score.players?.profile_picture_url ? score.players.profile_picture_url : <UserOutlined />} />}
-              title={<Typography.Paragraph>{score.players?.name}</Typography.Paragraph>}
-              description={<Typography.Paragraph>{score.final_score}</Typography.Paragraph>}
-            />
-            <div>{score.final_score}</div>
-          </List.Item>
-        )}
-    />
+  return (  
+    <div>
+      <Image preview={false} src={logo} />
+      <Typography.Paragraph>Explore the different sheet pages for 2023 Leaderboards, Player Profiles, Player vs Player Comparisons, Month Stats, & Marframs in-depth Player Stats!</Typography.Paragraph>
+      <Typography.Paragraph>Main Contributors: aGameScout, Marfram, HydrantDude | Special Thanks: Pumpyheart, Fractal161, DanQZ, vandweller, Lok & everyone whos helped improve the sheet</Typography.Paragraph>
+      <Typography.Paragraph>Discuss this sheet, post your statistical findings or give feedback in the https://ctm.gg/discord CTM discord server under the #Match-Statistics channel</Typography.Paragraph>
+      <div className={styles.container}>
+        <List
+          loading={false}
+          itemLayout="horizontal"
+          dataSource={scores}
+          renderItem={(score) => (
+            <List.Item
+              actions={[<a href={score.game_link as string} target='blank' rel='noopener' key="youtube-link">Video</a>]}
+            >
+              <List.Item.Meta
+                avatar={<Avatar src={score.players?.profile_picture_url ? score.players.profile_picture_url : <UserOutlined />} />}
+                title={<Typography.Paragraph>{score.players?.name}</Typography.Paragraph>}
+                description={<Typography.Paragraph>{score.final_score}</Typography.Paragraph>}
+              />
+              <div>{score.final_score}</div>
+            </List.Item>
+          )}
+      />
+      </div>
     </div>
   );
 };

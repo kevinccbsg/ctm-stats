@@ -30,3 +30,27 @@ export const getScores = async (type: Scores) => {
   console.log(error);
   return games;
 };
+
+export const lifeTimeWinningPercentage = async () => {
+  const { data, error } = await supabase.rpc('lifetime_stats')
+    .order('winning_percentage', { ascending: false })
+    .limit(10);
+  console.log(error);
+  return data;
+};
+
+export const lifeTimeGames = async () => {
+  const { data, error } = await supabase.rpc('lifetime_stats')
+    .order('total_games', { ascending: false })
+    .limit(10);
+  console.log(error);
+  return data;
+};
+
+export const lifeTimeMaxouts = async () => {
+  const { data, error } = await supabase.rpc('lifetime_stats')
+    .order('maxout_games', { ascending: false })
+    .limit(10);
+  console.log(error);
+  return data;
+};
