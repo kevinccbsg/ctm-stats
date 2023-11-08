@@ -12,42 +12,51 @@ export interface Database {
       events: {
         Row: {
           id: number
-          name: string | null
-          year: number | null
+          name: string
+          year: number
         }
         Insert: {
           id?: number
-          name?: string | null
-          year?: number | null
+          name: string
+          year: number
         }
         Update: {
           id?: number
-          name?: string | null
-          year?: number | null
+          name?: string
+          year?: number
         }
         Relationships: []
       }
       matches: {
         Row: {
-          event_id: number | null
+          event_id: number
           id: number
-          winner_id: number | null
+          loser_id: number
+          winner_id: number
         }
         Insert: {
-          event_id?: number | null
+          event_id: number
           id?: number
-          winner_id?: number | null
+          loser_id: number
+          winner_id: number
         }
         Update: {
-          event_id?: number | null
+          event_id?: number
           id?: number
-          winner_id?: number | null
+          loser_id?: number
+          winner_id?: number
         }
         Relationships: [
           {
             foreignKeyName: "matches_event_id_fkey"
             columns: ["event_id"]
             referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "matches_loser_id_fkey"
+            columns: ["loser_id"]
+            referencedRelation: "players"
             referencedColumns: ["id"]
           },
           {
@@ -61,19 +70,19 @@ export interface Database {
       players: {
         Row: {
           id: number
-          name: string | null
+          name: string
           profile_picture_url: string | null
           twitch_url: string | null
         }
         Insert: {
           id?: number
-          name?: string | null
+          name: string
           profile_picture_url?: string | null
           twitch_url?: string | null
         }
         Update: {
           id?: number
-          name?: string | null
+          name?: string
           profile_picture_url?: string | null
           twitch_url?: string | null
         }
@@ -81,79 +90,79 @@ export interface Database {
       }
       tetris_games: {
         Row: {
-          cap: string | null
+          cap: string
           final_score: number | null
           game_link: string | null
-          game_number: number | null
-          game_result: boolean | null
+          game_number: number
+          game_result: boolean
           id: number
-          level_start: number | null
+          level_start: number
           lines_29: number | null
-          match_id: number | null
-          match_pairing: string | null
+          match_id: number
+          match_pairing: string
           no_m_lines: number | null
           no_m_score: number | null
-          player_id: number | null
-          playstyle: string | null
+          player_id: number
+          playstyle: string
           post_score_19: number | null
-          round: string | null
+          round: string
           score_29: number | null
-          sps: boolean | null
+          sps: boolean
           start_19l: number | null
           start_29l: number | null
-          topout_type: string | null
+          topout_type: string
           total_lines: number | null
           trans_19: number | null
           trans_29: number | null
         }
         Insert: {
-          cap?: string | null
+          cap: string
           final_score?: number | null
           game_link?: string | null
-          game_number?: number | null
-          game_result?: boolean | null
+          game_number: number
+          game_result: boolean
           id?: number
-          level_start?: number | null
+          level_start: number
           lines_29?: number | null
-          match_id?: number | null
-          match_pairing?: string | null
+          match_id: number
+          match_pairing: string
           no_m_lines?: number | null
           no_m_score?: number | null
-          player_id?: number | null
-          playstyle?: string | null
+          player_id: number
+          playstyle: string
           post_score_19?: number | null
-          round?: string | null
+          round: string
           score_29?: number | null
-          sps?: boolean | null
+          sps: boolean
           start_19l?: number | null
           start_29l?: number | null
-          topout_type?: string | null
+          topout_type: string
           total_lines?: number | null
           trans_19?: number | null
           trans_29?: number | null
         }
         Update: {
-          cap?: string | null
+          cap?: string
           final_score?: number | null
           game_link?: string | null
-          game_number?: number | null
-          game_result?: boolean | null
+          game_number?: number
+          game_result?: boolean
           id?: number
-          level_start?: number | null
+          level_start?: number
           lines_29?: number | null
-          match_id?: number | null
-          match_pairing?: string | null
+          match_id?: number
+          match_pairing?: string
           no_m_lines?: number | null
           no_m_score?: number | null
-          player_id?: number | null
-          playstyle?: string | null
+          player_id?: number
+          playstyle?: string
           post_score_19?: number | null
-          round?: string | null
+          round?: string
           score_29?: number | null
-          sps?: boolean | null
+          sps?: boolean
           start_19l?: number | null
           start_29l?: number | null
-          topout_type?: string | null
+          topout_type?: string
           total_lines?: number | null
           trans_19?: number | null
           trans_29?: number | null
@@ -188,3 +197,4 @@ export interface Database {
     }
   }
 }
+

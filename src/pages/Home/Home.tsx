@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { UserOutlined } from '@ant-design/icons';
 import styles from './Home.module.scss';
-import { allTimeHighScores } from '../../api';
-import { Avatar, List, Skeleton, Typography } from 'antd';
+import { allTimeHigh19Score, allTimeHighScores } from '../../api';
+import { Avatar, List, Typography } from 'antd';
 
 interface Score {
   id: number;
@@ -19,9 +19,15 @@ interface Score {
 const Homepage = () => {
   const [scores, setScore] = useState<Score[]>([]);
   useEffect(() => {
+    allTimeHigh19Score()
+      .then(data => {
+      console.log(data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
     allTimeHighScores()
       .then(data => {
-        console.log(data);
         if (data) {
           setScore(data);
         }
