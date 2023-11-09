@@ -16,6 +16,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             colorTextHeading: appTheme.mainColor,
             colorSuccess: appTheme.mainColor,
             colorSuccessActive: appTheme.mainColor,
+            fontSize: 18,
           },
           algorithm: theme.darkAlgorithm,
         }}

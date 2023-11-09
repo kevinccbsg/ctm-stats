@@ -3,6 +3,7 @@ import { Table, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 
 interface DataType {
+  key: React.Key;
   id: number;
   name: string;
   value: string;
@@ -11,8 +12,8 @@ interface DataType {
 const columns: ColumnsType<DataType> = [
   {
     title: '#',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'index',
+    key: 'index',
     render: (_val, _record, index) => <Typography.Text strong style={{ color: '#20e128'}}>{index + 1}</Typography.Text>,
   },
   {
@@ -31,7 +32,7 @@ const columns: ColumnsType<DataType> = [
 
 interface Props {
   title: string;
-  getStatsMethod: () => Promise<DataType[]>;
+  getStatsMethod: () => Promise<Omit<DataType, 'key'>[]>;
 }
 
 const LifetimeStats = ({ getStatsMethod, title }: Props) => {
@@ -39,7 +40,10 @@ const LifetimeStats = ({ getStatsMethod, title }: Props) => {
   useEffect(() => {
     getStatsMethod()
       .then(values => {
-        setData(values);
+        setData(values.map(value => ({
+          ...value,
+          key: value.id,
+        })));
       })
       .catch(error => {
         console.log(error);
