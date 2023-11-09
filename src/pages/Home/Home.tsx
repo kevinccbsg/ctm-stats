@@ -1,9 +1,10 @@
 import { Avatar, Image, List, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import { getScores, lifeTimeMaxouts, Scores } from '../../api';
+import { getScores, Scores, LifeTimeStatistic, lifetimeStats } from '../../api';
 import logo from '../../assets/ctm_logo.png';
 import styles from './Home.module.scss';
+import LifetimeStats from '../../components/LifetimeStats/LifetimeStats';
 
 interface Score {
   id: number;
@@ -20,13 +21,6 @@ interface Score {
 const Homepage = () => {
   const [scores, setScore] = useState<Score[]>([]);
   useEffect(() => {
-    lifeTimeMaxouts()
-      .then(data => {
-      console.log(data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
     getScores(Scores.FINAL_SCORE)
       .then(data => {
         if (data) {
@@ -37,7 +31,7 @@ const Homepage = () => {
         console.log(error);
       });
   }, []);
-  return (  
+  return (
     <div>
       <Image preview={false} src={logo} />
       <Typography.Paragraph>Explore the different sheet pages for 2023 Leaderboards, Player Profiles, Player vs Player Comparisons, Month Stats, & Marframs in-depth Player Stats!</Typography.Paragraph>
@@ -60,7 +54,19 @@ const Homepage = () => {
               <div>{score.final_score}</div>
             </List.Item>
           )}
-      />
+        />
+        <LifetimeStats
+          title="Lifetime Winning Percentage"
+          getStatsMethod={() => lifetimeStats(LifeTimeStatistic.WINNING_PERCENTAGE, '%')}
+        />
+        <LifetimeStats
+          title="Lifetime Total Games"
+          getStatsMethod={() => lifetimeStats(LifeTimeStatistic.TOTAL_GAMES)}
+        />
+        <LifetimeStats
+          title="Lifetime Total Maxouts"
+          getStatsMethod={() => lifetimeStats(LifeTimeStatistic.MAXOUT_GAMES)}
+        />
       </div>
     </div>
   );

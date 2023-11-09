@@ -31,26 +31,27 @@ export const getScores = async (type: Scores) => {
   return games;
 };
 
-export const lifeTimeWinningPercentage = async () => {
-  const { data, error } = await supabase.rpc('lifetime_stats')
-    .order('winning_percentage', { ascending: false })
-    .limit(10);
-  console.log(error);
-  return data;
-};
+export enum LifeTimeStatistic {
+  WINNING_PERCENTAGE = 'winning_percentage',
+  TOTAL_GAMES = 'total_games',
+  MAXOUT_GAMES = 'maxout_games',
+}
 
-export const lifeTimeGames = async () => {
-  const { data, error } = await supabase.rpc('lifetime_stats')
-    .order('total_games', { ascending: false })
-    .limit(10);
-  console.log(error);
-  return data;
-};
+interface Statistic {
+  id: number;
+  name: string;
+  value: string;
+}
 
-export const lifeTimeMaxouts = async () => {
+export const lifetimeStats = async (stat: LifeTimeStatistic, prefix = ''): Promise<Statistic[]> => {
   const { data, error } = await supabase.rpc('lifetime_stats')
-    .order('maxout_games', { ascending: false })
+    .order(stat, { ascending: false })
     .limit(10);
   console.log(error);
-  return data;
+  if (!data) return [];
+  return data.map(item => ({
+    id: item.id,
+    name: item.name,
+    value: `${+item[stat].toFixed(2)}${prefix}`,
+  }));
 };

@@ -13,6 +13,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           token: {
             colorPrimary: appTheme.mainColor,
             colorText: appTheme.textColor,
+            colorTextHeading: appTheme.mainColor,
+            colorSuccess: appTheme.mainColor,
+            colorSuccessActive: appTheme.mainColor,
           },
           algorithm: theme.darkAlgorithm,
         }}
