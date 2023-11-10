@@ -26,7 +26,6 @@ const columns: ColumnsType<DataType> = [
     key: 'name',
     render: (value) => <Typography.Text strong>{value}</Typography.Text>,
   },
-  Table.EXPAND_COLUMN,
   {
     title: 'value',
     key: 'value',

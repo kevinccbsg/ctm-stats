@@ -4,12 +4,16 @@ header.navbar {
   z-index: 10;
   > ul.menu {
     padding-top: 10px;
-    .imageContainer {
+    > li:first-child {
       margin-right: auto;
-      padding-bottom: 10px;
-      .image {
-        width: 40px;
-      }
     }
+  }
+}
+
+.imageContainer {
+  display: block;
+  padding-bottom: 10px;
+  .image {
+    width: 40px;
   }
 }
