@@ -1,15 +1,15 @@
 import { Typography } from 'antd';
 import { getScores, EScores, LifeTimeStatistic, lifetimeStats } from '../../api';
-import styles from './Home.module.scss';
 import LifetimeStats from '../../components/LifetimeStatsTable/LifetimeStatsTable';
 import ScoreTable from '../../components/ScoreTable/ScoreTable';
 import MainContainer from '../../Layouts/MainContainer/MainContainer';
+import StatsGrid from '../../Layouts/StatsGrid/StatsGrid';
 
 const Homepage = () => {
   return (
     <MainContainer>
       <Typography.Title level={1}>All Time CTM Masters Event Leaderboards</Typography.Title>
-      <div className={styles.statsContainer}>
+      <StatsGrid>
         <ScoreTable
           title="All Time High Score, Faster Masters"
           getStatsMethod={() => getScores(EScores.FINAL_SCORE)}
@@ -34,7 +34,7 @@ const Homepage = () => {
           title="Lifetime Total Maxouts"
           getStatsMethod={() => lifetimeStats(LifeTimeStatistic.MAXOUT_GAMES)}
         />
-      </div>
+      </StatsGrid>
     </MainContainer>
   );
 };
