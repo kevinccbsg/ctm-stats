@@ -24,7 +24,7 @@ interface Score {
 }
 
 export const getScores = async (type: EScores): Promise<Score[]> => {
-  const { data: scores, error } = await supabase
+  const { data: results, error } = await supabase
     .from('tetris_games')
     .select(`
       id,
@@ -32,20 +32,28 @@ export const getScores = async (type: EScores): Promise<Score[]> => {
       trans_19,
       trans_29,
       game_link,
+      game_number,
+      game_result,
       round,
+      matches (
+        id,
+        events (
+          name
+        )
+      ),
       ${playerQueryData}
     `)
     .not(type, 'is', null)
     .order(type, { ascending: false })
     .limit(10);
   console.log(error);
-  if (!scores) return [];
-  return scores.map(score => ({
-    id: score.id,
-    name: score.players?.name as string,
-    link: score.game_link,
-    description: score.round,
-    value: `${(score[type] as number).toLocaleString()}`,
+  if (!results) return [];
+  return results.map(result => ({
+    id: result.id,
+    name: result.players?.name as string,
+    link: result.game_link,
+    description: `Game ${result.game_number} in ${result.round} of ${result.matches?.events?.name}`,
+    value: `${(result[type] as number).toLocaleString()}`,
   }));
 };
 
