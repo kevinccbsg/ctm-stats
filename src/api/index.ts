@@ -81,3 +81,16 @@ export const lifetimeStats = async (stat: LifeTimeStatistic, prefix = ''): Promi
     value: `${item[stat].toLocaleString()}${prefix}`,
   }));
 };
+
+export const yearStats = async (stat: LifeTimeStatistic, year: number, prefix = ''): Promise<Statistic[]> => {
+  const { data, error } = await supabase.rpc('year_stats', { event_year_param: year })
+    .order(stat, { ascending: false })
+    .limit(10);
+  console.log(error);
+  if (!data) return [];
+  return data.map(item => ({
+    id: item.id,
+    name: item.name,
+    value: `${item[stat].toLocaleString()}${prefix}`,
+  }));
+};

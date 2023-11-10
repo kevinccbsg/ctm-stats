@@ -1,24 +1,26 @@
 import { Typography } from "antd";
 import MainContainer from "../../Layouts/MainContainer/MainContainer";
 import StatsGrid from "../../Layouts/StatsGrid/StatsGrid";
-import { LifeTimeStatistic, lifetimeStats } from "../../api";
+import { LifeTimeStatistic, yearStats } from "../../api";
 import LifetimeStats from "../../components/LifetimeStatsTable/LifetimeStatsTable";
+
+const currentYear = new Date().getFullYear();
 
 const LatestLeaderboards = () => (
   <MainContainer>
-    <Typography.Title level={1}>2023 CTM Masters Event Leaderboards</Typography.Title>
+    <Typography.Title level={1}>{currentYear} CTM Masters Event Leaderboards</Typography.Title>
     <StatsGrid>
       <LifetimeStats
         title="Lifetime Winning Percentage"
-        getStatsMethod={() => lifetimeStats(LifeTimeStatistic.WINNING_PERCENTAGE, '%')}
+        getStatsMethod={() => yearStats(LifeTimeStatistic.WINNING_PERCENTAGE, currentYear, '%')}
       />
       <LifetimeStats
         title="Lifetime Total Games"
-        getStatsMethod={() => lifetimeStats(LifeTimeStatistic.TOTAL_GAMES)}
+        getStatsMethod={() => yearStats(LifeTimeStatistic.TOTAL_GAMES, currentYear)}
       />
       <LifetimeStats
         title="Lifetime Total Maxouts"
-        getStatsMethod={() => lifetimeStats(LifeTimeStatistic.MAXOUT_GAMES)}
+        getStatsMethod={() => yearStats(LifeTimeStatistic.MAXOUT_GAMES, currentYear)}
       />
     </StatsGrid>
   </MainContainer>

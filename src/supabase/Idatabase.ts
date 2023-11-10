@@ -187,8 +187,39 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      lifetime_stats: {
-        Args: Record<PropertyKey, never>
+      lifetime_stats:
+        | {
+            Args: Record<PropertyKey, never>
+            Returns: {
+              id: number
+              name: string
+              profile_picture_url: string
+              twitch_url: string
+              games_won: number
+              maxout_games: number
+              total_games: number
+              winning_percentage: number
+            }[]
+          }
+        | {
+            Args: {
+              event_year_param: number
+            }
+            Returns: {
+              id: number
+              name: string
+              profile_picture_url: string
+              twitch_url: string
+              games_won: number
+              total_games: number
+              maxout_games: number
+              winning_percentage: number
+            }[]
+          }
+      year_stats: {
+        Args: {
+          event_year_param: number
+        }
         Returns: {
           id: number
           name: string
