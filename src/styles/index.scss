@@ -1,5 +1,9 @@
 @use './colors.scss' as c;
 
 body {
+  margin: 0;
+  padding: 0;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
   background-color: c.$background;
 }

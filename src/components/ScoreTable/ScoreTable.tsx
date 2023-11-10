@@ -65,7 +65,7 @@ const ScoreTable = ({ getStatsMethod, title }: Props) => {
   }, [getStatsMethod]);
   return (
     <div>
-      <Typography.Title level={4}>{title}</Typography.Title>
+      <Typography.Title style={{ minHeight: 68 }} level={4}>{title}</Typography.Title>
       <Table
         showHeader={false}
         pagination={false}

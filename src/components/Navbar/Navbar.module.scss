@@ -1,0 +1,15 @@
+header.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  > ul.menu {
+    padding-top: 10px;
+    .imageContainer {
+      margin-right: auto;
+      padding-bottom: 10px;
+      .image {
+        width: 40px;
+      }
+    }
+  }
+}

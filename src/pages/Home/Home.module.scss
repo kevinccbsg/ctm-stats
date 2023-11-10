@@ -1,4 +1,16 @@
+@use '../../styles/responsive' as r;
+
 .container {
-  max-width: 620px;
-  margin: 80px auto 0 auto;
+  max-width: 1400px;
+  margin: 40px auto 0 auto;
+  .statsContainer {
+    max-width: 620px;
+    margin: 0 auto;
+    @include r.desktop {
+      max-width: none;
+      display: grid;
+      gap: 40px;
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
 }
