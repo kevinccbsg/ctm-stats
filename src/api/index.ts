@@ -1,14 +1,5 @@
 import { supabase } from '../supabase/client';
 
-const playerQueryData = `
-  players (
-    id,
-    name,
-    profile_picture_url,
-    twitch_url
-  )
-`;
-
 export enum EScores {
   FINAL_SCORE = 'final_score',
   TRANSITION_19_SCORE = 'trans_19',
@@ -21,6 +12,32 @@ interface Score {
   description: string;
   value: string;
   link: string | null;
+}
+
+interface Result {
+  id: number;
+  final_score: number | null;
+  trans_19: number | null;
+  trans_29: number | null;
+  game_link: string | null;
+  game_number: number;
+  game_result: boolean;
+  round: string;
+  matches: {
+    id: number;
+    events: {
+        name: string;
+    } | null;
+  } | null;
+  player: {
+    id: number;
+    name: string;
+    profile_picture_url: string | null;
+  };
+  opponent: {
+    id: number;
+    name: string;
+  };
 }
 
 export const getScores = async (type: EScores): Promise<Score[]> => {
@@ -41,18 +58,28 @@ export const getScores = async (type: EScores): Promise<Score[]> => {
           name
         )
       ),
-      ${playerQueryData}
+      player:player_id (
+        id,
+        name,
+        profile_picture_url
+      ),
+      opponent:opponent_id (
+        id,
+        name
+      )
     `)
     .not(type, 'is', null)
     .order(type, { ascending: false })
-    .limit(10);
+    .limit(10)
+    .returns<Result[] | null>();
   console.log(error);
   if (!results) return [];
+  console.log(results[0]);
   return results.map(result => ({
     id: result.id,
-    name: result.players?.name as string,
+    name: result.player?.name,
     link: result.game_link,
-    description: `Game ${result.game_number} in ${result.round} of ${result.matches?.events?.name}`,
+    description: `Win vs ${result.opponent?.name}, Game ${result.game_number} in ${result.round} of ${result.matches?.events?.name}`,
     value: `${(result[type] as number).toLocaleString()}`,
   }));
 };

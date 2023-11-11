@@ -102,6 +102,7 @@ export interface Database {
           match_pairing: string
           no_m_lines: number | null
           no_m_score: number | null
+          opponent_id: number | null
           player_id: number
           playstyle: string
           post_score_19: number | null
@@ -128,6 +129,7 @@ export interface Database {
           match_pairing: string
           no_m_lines?: number | null
           no_m_score?: number | null
+          opponent_id?: number | null
           player_id: number
           playstyle: string
           post_score_19?: number | null
@@ -154,6 +156,7 @@ export interface Database {
           match_pairing?: string
           no_m_lines?: number | null
           no_m_score?: number | null
+          opponent_id?: number | null
           player_id?: number
           playstyle?: string
           post_score_19?: number | null
@@ -172,6 +175,12 @@ export interface Database {
             foreignKeyName: "tetris_games_match_id_fkey"
             columns: ["match_id"]
             referencedRelation: "matches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tetris_games_opponent_id_fkey"
+            columns: ["opponent_id"]
+            referencedRelation: "players"
             referencedColumns: ["id"]
           },
           {
@@ -226,8 +235,8 @@ export interface Database {
           profile_picture_url: string
           twitch_url: string
           games_won: number
-          total_games: number
           maxout_games: number
+          total_games: number
           winning_percentage: number
         }[]
       }
