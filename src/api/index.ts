@@ -121,3 +121,47 @@ export const yearStats = async (stat: LifeTimeStatistic, year: number, prefix = 
     value: `${item[stat].toLocaleString()}${prefix}`,
   }));
 };
+
+export const userStats = async (playerId: number) => {
+  const { data, error } = await supabase
+    .from('tetris_games')
+    .select(`
+      id,
+      final_score,
+      trans_19,
+      trans_29,
+      game_link,
+      game_number,
+      game_result,
+      round,
+      matches (
+        id,
+        events (
+          name
+        )
+      ),
+      player:player_id (
+        id,
+        name,
+        profile_picture_url
+      ),
+      opponent:opponent_id (
+        id,
+        name
+      )
+    `)
+    .eq('player_id', playerId)
+    .not('final_score', 'is', null)
+    .order('final_score', { ascending: false })
+  console.log(error);
+  return {
+    results: (data || []).map(result => ({
+      id: result.id,
+      name: `Win vs ${result.opponent?.name}, Game ${result.game_number} in ${result.round} of ${result.matches?.events?.name}`,
+      link: result.game_link,
+      description: '',
+      value: `${(result.final_score as number).toLocaleString()}`,
+    })),
+    user: data ? data[0].player : {},
+  };
+};

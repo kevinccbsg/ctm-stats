@@ -1,7 +1,7 @@
 import { Typography } from 'antd';
 import { getScores, EScores, LifeTimeStatistic, lifetimeStats } from '../../api';
 import LifetimeStats from '../../components/LifetimeStatsTable/LifetimeStatsTable';
-import ScoreTable from '../../components/ScoreTable/ScoreTable';
+import ScoreTableRetriever from '../../components/ScoreTableRetriever/ScoreTableRetriever';
 import MainContainer from '../../Layouts/MainContainer/MainContainer';
 import StatsGrid from '../../Layouts/StatsGrid/StatsGrid';
 
@@ -10,15 +10,15 @@ const Homepage = () => {
     <MainContainer>
       <Typography.Title level={1}>All Time CTM Masters Event Leaderboards</Typography.Title>
       <StatsGrid>
-        <ScoreTable
+        <ScoreTableRetriever
           title="All Time High Score, Faster Masters"
           getStatsMethod={() => getScores(EScores.FINAL_SCORE)}
         />
-        <ScoreTable
+        <ScoreTableRetriever
           title="All Time Highest Level 19 Transition Score"
           getStatsMethod={() => getScores(EScores.TRANSITION_19_SCORE)}
         />
-        <ScoreTable
+        <ScoreTableRetriever
           title="All Time Highest Level 29 Transition Score"
           getStatsMethod={() => getScores(EScores.TRANSITION_29_SCORE)}
         />

@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Table, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { VideoCameraOutlined } from '@ant-design/icons';
@@ -45,23 +44,10 @@ const columns: ColumnsType<DataType> = [
 
 interface Props {
   title: string;
-  getStatsMethod: () => Promise<Omit<DataType, 'key'>[]>;
+  data: Omit<DataType, 'key'>[];
 }
 
-const ScoreTable = ({ getStatsMethod, title }: Props) => {
-  const [data, setData] = useState<DataType[]>([]);
-  useEffect(() => {
-    getStatsMethod()
-      .then(values => {
-        setData(values.map(value => ({
-          ...value,
-          key: value.id,
-        })));
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, [getStatsMethod]);
+const ScoreTable = ({ data, title }: Props) => {
   return (
     <div>
       <Typography.Title style={{ minHeight: 68 }} level={4}>{title}</Typography.Title>
@@ -72,7 +58,10 @@ const ScoreTable = ({ getStatsMethod, title }: Props) => {
           expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.description}</p>,
         }}
         columns={columns}
-        dataSource={data}
+        dataSource={data.map(value => ({
+          ...value,
+          key: value.id,
+        }))}
       />
     </div>
   );
