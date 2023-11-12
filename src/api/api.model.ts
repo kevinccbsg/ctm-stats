@@ -25,6 +25,7 @@ export interface GameResult {
     id: number;
     events: {
         name: string;
+        year: number;
     } | null;
   } | null;
   player: {

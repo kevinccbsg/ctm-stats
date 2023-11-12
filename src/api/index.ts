@@ -13,7 +13,8 @@ const gameResultsQuery = `
   matches (
     id,
     events (
-      name
+      name,
+      year
     )
   ),
   player:player_id (
@@ -119,4 +120,22 @@ export const getPlayersList =async (name: string) => {
   console.log(error);
   if (!data) return [];
   return data;
-}
+};
+
+export const playerVsPlayer = async (playerId: number, opponentId: number) => {
+  const { data, error } = await supabase
+    .from('tetris_games')
+    .select(gameResultsQuery)
+    .eq('player_id', playerId)
+    .eq('opponent_id', opponentId)
+    .not('final_score', 'is', null)
+    .returns<GameResult[] | null>();
+  console.log(error);
+  if (!data) throw new Error(`Player ${playerId} and ${opponentId} not found`);
+  return {
+    results: data,
+    user: data[0].player,
+    opponent: data[0].opponent,
+  };
+};
+
