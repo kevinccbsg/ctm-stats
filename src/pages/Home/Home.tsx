@@ -1,9 +1,10 @@
 import { Typography } from 'antd';
-import { getScores, EScores, LifeTimeStatistic, lifetimeStats } from '../../api';
 import LifetimeStats from '../../components/LifetimeStatsTable/LifetimeStatsTable';
 import ScoreTableRetriever from '../../components/ScoreTableRetriever/ScoreTableRetriever';
 import MainContainer from '../../Layouts/MainContainer/MainContainer';
 import StatsGrid from '../../Layouts/StatsGrid/StatsGrid';
+import { getScores, LifeTimeStatistic, lifetimeStats } from '../../api';
+import { EScores } from '../../api/api.model';
 
 const Homepage = () => {
   return (
