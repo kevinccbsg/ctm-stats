@@ -38,9 +38,9 @@ export const getScores = async (type: EScores): Promise<Score[]> => {
     .returns<GameResult[] | null>();
   console.log(error);
   if (!results) return [];
-  console.log(results[0]);
   return results.map(result => ({
     id: result.id,
+    image: result.player.profile_picture_url,
     name: result.player?.name,
     link: result.game_link,
     description: `Win vs ${result.opponent?.name}, Game ${result.game_number} in ${result.round} of ${result.matches?.events?.name}`,
@@ -57,6 +57,7 @@ export enum LifeTimeStatistic {
 interface Statistic {
   id: number;
   name: string;
+  image: string | null;
   value: string;
 }
 
@@ -69,6 +70,7 @@ export const lifetimeStats = async (stat: LifeTimeStatistic, prefix = ''): Promi
   return data.map(item => ({
     id: item.id,
     name: item.name,
+    image: item.profile_picture_url,
     value: `${item[stat].toLocaleString()}${prefix}`,
   }));
 };
@@ -82,6 +84,7 @@ export const yearStats = async (stat: LifeTimeStatistic, year: number, prefix = 
   return data.map(item => ({
     id: item.id,
     name: item.name,
+    image: item.profile_picture_url,
     value: `${item[stat].toLocaleString()}${prefix}`,
   }));
 };

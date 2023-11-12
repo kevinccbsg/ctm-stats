@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { userStats } from "../../api";
 import MainContainer from "../../Layouts/MainContainer/MainContainer";
 import { Avatar, Typography } from "antd";
-import ScoreTable from "../../components/ScoreTable/ScoreTable";
 import { UserOutlined } from "@ant-design/icons";
 import SearchUser from "../../components/SearchUser/SearchUser";
 
@@ -50,7 +49,6 @@ const PlayerProfile = () => {
             src={data.user.profile_picture_url}
             icon={<UserOutlined />}
           />
-          <ScoreTable title="Games" data={data.results} />
         </div>
       )}
     </MainContainer>

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import styles from './MainContainer.module.scss';
 import Navbar from '../../components/Navbar/Navbar';
+import styles from './MainContainer.module.scss';
 
 interface Props {
   children: ReactNode | ReactNode[];

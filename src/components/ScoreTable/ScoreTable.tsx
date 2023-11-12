@@ -1,11 +1,12 @@
-import { Table, Typography } from 'antd';
+import { Avatar, Table, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { VideoCameraOutlined } from '@ant-design/icons';
+import { UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 
 interface DataType {
   key: React.Key;
   id: number;
   name: string;
+  image: string | null;
   description: string;
   value: string;
   link: string | null;
@@ -16,14 +17,23 @@ const columns: ColumnsType<DataType> = [
     title: '#',
     dataIndex: 'index',
     key: 'index',
+    width: 50,
     render: (_val, _record, index) => <Typography.Text strong style={{ color: '#20e128'}}>{index + 1}</Typography.Text>,
   },
-  Table.EXPAND_COLUMN,
   {
     title: 'Player',
     dataIndex: 'name',
     key: 'name',
-    render: (value) => <Typography.Text strong>{value}</Typography.Text>,
+    render: (value, record) => (
+      <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+        <Avatar
+          size={40}
+          src={record.image === '' ? null : record.image}
+          icon={<UserOutlined />}
+        />
+        <Typography.Text strong>{value}</Typography.Text>
+      </div>
+    ),
   },
   {
     title: 'value',
@@ -40,6 +50,7 @@ const columns: ColumnsType<DataType> = [
       <a href={value} target='_blank' rel="noopener noreferrer"><VideoCameraOutlined /></a>
     ): (<span>No link</span>),
   },
+  Table.EXPAND_COLUMN,
 ];
 
 interface Props {

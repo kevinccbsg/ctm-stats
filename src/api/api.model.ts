@@ -6,6 +6,7 @@ export enum EScores {
 
 export interface Score {
   id: number;
+  image: string | null;
   name: string;
   description: string;
   value: string;

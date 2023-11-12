@@ -4,6 +4,7 @@ import ScoreTable from '../ScoreTable/ScoreTable';
 interface DataType {
   key: React.Key;
   id: number;
+  image: string | null;
   name: string;
   description: string;
   value: string;

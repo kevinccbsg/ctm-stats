@@ -1,5 +1,4 @@
 
-$tablet-width-portrait: 600px;
 $tablet-width: 769px;
 $desktop-width: 1100px;
 $large-desktop-width: 1441px;
@@ -14,12 +13,6 @@ $smallHeight: 670px;
   }
 }
 
-@mixin tablet-portrait {
-  @media (max-width: #{$tablet-width-portrait}) {
-    @content;
-  }
-}
-
 @mixin tablet {
   @media (min-width: #{$tablet-width}) {
     @content;
@@ -28,6 +21,12 @@ $smallHeight: 670px;
 
 @mixin desktop {
   @media (min-width: #{$desktop-width}) {
+    @content;
+  }
+}
+
+@mixin large-desktop {
+  @media (min-width: #{$large-desktop-width}) {
     @content;
   }
 }

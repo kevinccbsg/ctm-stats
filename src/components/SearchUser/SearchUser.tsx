@@ -43,9 +43,6 @@ interface Props {
 const SearchUser: React.FC<Props> = ({ placeholder, style, value, setValue }) => {
   const [data, setData] = useState<SelectProps['options']>([]);
 
-  console.log(value);
-  console.log(data);
-
   const handleSearch = (newValue: string) => {
     fetch(newValue, setData);
   };

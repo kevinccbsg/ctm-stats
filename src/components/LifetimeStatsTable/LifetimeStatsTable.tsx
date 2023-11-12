@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Table, Typography } from 'antd';
+import { Avatar, Table, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import { UserOutlined } from '@ant-design/icons';
 
 interface DataType {
   key: React.Key;
   id: number;
+  image: string | null;
   name: string;
   value: string;
 }
@@ -14,13 +16,23 @@ const columns: ColumnsType<DataType> = [
     title: '#',
     dataIndex: 'index',
     key: 'index',
+    width: 50,
     render: (_val, _record, index) => <Typography.Text strong style={{ color: '#20e128'}}>{index + 1}</Typography.Text>,
   },
   {
     title: 'Player',
     dataIndex: 'name',
     key: 'name',
-    render: (value) => <Typography.Text strong>{value}</Typography.Text>,
+    render: (value, record) => (
+      <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+        <Avatar
+          size={40}
+          src={record.image === '' ? null : record.image}
+          icon={<UserOutlined />}
+        />
+        <Typography.Text strong>{value}</Typography.Text>
+      </div>
+    ),
   },
   {
     title: 'value',
@@ -51,7 +63,7 @@ const LifetimeStats = ({ getStatsMethod, title }: Props) => {
   }, [getStatsMethod]);
   return (
     <div>
-      <Typography.Title level={4}>{title}</Typography.Title>
+      <Typography.Title level={4} style={{ minHeight: 68 }}>{title}</Typography.Title>
       <Table
         showHeader={false}
         pagination={false}
