@@ -4,6 +4,7 @@ import MainContainer from "../../Layouts/MainContainer/MainContainer";
 import { Avatar, Typography } from "antd";
 import ScoreTable from "../../components/ScoreTable/ScoreTable";
 import { UserOutlined } from "@ant-design/icons";
+import SearchUser from "../../components/SearchUser/SearchUser";
 
 interface Data {
   results: {
@@ -22,21 +23,26 @@ interface Data {
 
 const PlayerProfile = () => {
   const [data, setData] = useState<Data>();
+  const [value, setValue] = useState<string | null>(null);
   useEffect(() => {
-    userStats(88)
-      .then(data => {
-        if (data) {
+    if (value) {
+      userStats(parseInt(value, 10))
+        .then(data => {
           setData(data);
-          console.log(data.results);
-          
-        }
-      })
-      .catch(error => console.log(error))
-  }, []);
+        })
+        .catch(error => console.log(error))
+    }
+  }, [value]);
   return (
     <MainContainer>
       <Typography.Title level={1}>Player profiles</Typography.Title>
-      {data && (
+      <SearchUser
+        placeholder="Search player"
+        style={{ width: 200 }}
+        value={value}
+        setValue={setValue}
+      />
+      {(data && value) && (
         <div>
           <Typography.Title level={3}>{data.user.name}</Typography.Title>
           <Avatar

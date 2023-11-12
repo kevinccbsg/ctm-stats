@@ -94,14 +94,29 @@ export const userStats = async (playerId: number) => {
     .order('final_score', { ascending: false })
     .returns<GameResult[] | null>();
   console.log(error);
+  if (!data) throw new Error(`Player ${playerId} not found`);
   return {
-    results: (data || []).map(result => ({
+    results: data.map(result => ({
       id: result.id,
       name: `Win vs ${result.opponent?.name}, Game ${result.game_number} in ${result.round} of ${result.matches?.events?.name}`,
       link: result.game_link,
       description: '',
       value: `${(result.final_score as number).toLocaleString()}`,
     })),
-    user: data ? data[0].player : {},
+    user: data[0].player,
   };
 };
+
+export const getPlayersList =async (name: string) => {
+  const { data, error } = await supabase
+    .from('players')
+    .select(`
+      id,
+      name
+    `)
+    .ilike('name', `%${name}%`)
+    .order('name', { ascending: false });
+  console.log(error);
+  if (!data) return [];
+  return data;
+}
