@@ -102,10 +102,9 @@ export const userStats = async (playerId: number) => {
   return {
     results: data.map(result => ({
       id: result.id,
-      name: `Win vs ${result.opponent?.name}, Game ${result.game_number} in ${result.round} of ${result.matches?.events?.name}`,
       link: result.game_link,
-      description: '',
-      value: `${(result.final_score as number).toLocaleString()}`,
+      description: `Win vs ${result.opponent?.name}, Game ${result.game_number} in ${result.round} of ${result.matches?.events?.name}`,
+      score: (result.final_score || 0).toLocaleString(),
     })),
     user: data[0].player,
   };

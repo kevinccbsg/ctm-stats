@@ -4,14 +4,14 @@ import MainContainer from "../../Layouts/MainContainer/MainContainer";
 import { Avatar, Typography } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import SearchUser from "../../components/SearchUser/SearchUser";
+import UserResultTable from "../../components/UserResultTable/UserResultTable";
 
 interface Data {
   results: {
       id: number;
-      name: string;
       link: string | null;
       description: string;
-      value: string;
+      score: string;
   }[];
   user: {
     id: number;
@@ -48,6 +48,10 @@ const PlayerProfile = () => {
             size={130}
             src={data.user.profile_picture_url}
             icon={<UserOutlined />}
+          />
+          <UserResultTable
+            title={`Lifetime Games by ${data.user.name} in Chronological Order`}
+            data={data.results}
           />
         </div>
       )}
