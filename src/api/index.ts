@@ -124,20 +124,35 @@ export const getPlayersList =async (name: string) => {
   return data;
 };
 
-export const playerVsPlayer = async (playerId: number, opponentId: number) => {
-  const { data, error } = await supabase
-    .from('tetris_games')
-    .select(gameResultsQuery)
-    .eq('player_id', playerId)
-    .eq('opponent_id', opponentId)
-    .not('final_score', 'is', null)
-    .returns<GameResult[] | null>();
+interface Player {
+  id: number;
+  name: string;
+  profile_picture_url: string | null;
+}
+
+export const getPlayers = async (playerId: number, opponentId: number) => {
+  const { data, error } = await supabase.from('players')
+    .select(`
+      id,
+      name,
+      profile_picture_url
+    `)
+    .in('id', [playerId, opponentId]);
   console.log(error);
   if (!data) throw new Error(`Player ${playerId} and ${opponentId} not found`);
   return {
-    results: data,
-    user: data[0].player,
-    opponent: data[0].opponent,
+    player: data.find(({ id }) => id === playerId) as Player,
+    opponent: data.find(({ id }) => id === opponentId) as Player,
   };
+};
+
+export const playerVsPlayer = async (playerId: number, opponentId: number) => {
+  const { data, error } = await supabase.rpc('get_player_v_player_results', {
+    player1_id: playerId,
+    player2_id: opponentId,
+  })
+  console.log(error);
+  if (!data) return [];
+  return data;
 };
 

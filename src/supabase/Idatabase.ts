@@ -196,6 +196,26 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      get_player_v_player_results: {
+        Args: {
+          player1_id: number
+          player2_id: number
+        }
+        Returns: {
+          match_id: number
+          game_number: number
+          round_max: string
+          event_name: string
+          player1_style: string
+          player1_topout: string
+          player1_score: number
+          player1_result: string
+          player2_result: string
+          player2_score: number
+          player2_topout: string
+          player2_style: string
+        }[]
+      }
       lifetime_stats:
         | {
             Args: Record<PropertyKey, never>
