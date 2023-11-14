@@ -5,6 +5,7 @@ import { Avatar, Typography } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import SearchUser from "../../components/SearchUser/SearchUser";
 import UserResultTable from "../../components/UserResultTable/UserResultTable";
+import { useSearchParams } from "react-router-dom";
 
 interface Data {
   results: {
@@ -21,17 +22,19 @@ interface Data {
 }
 
 const PlayerProfile = () => {
+  const [searchParams] = useSearchParams({});
   const [data, setData] = useState<Data>();
-  const [value, setValue] = useState<string | null>(null);
+  const [value, setValue] = useState<string | null>(searchParams.get('player_filter'));
   useEffect(() => {
-    if (value) {
-      userStats(parseInt(value, 10))
+    const urlPlayer1 = searchParams.get('player');
+    if (urlPlayer1) {
+      userStats(parseInt(urlPlayer1, 10))
         .then(data => {
           setData(data);
         })
         .catch(error => console.log(error))
     }
-  }, [value]);
+  }, [searchParams]);
   return (
     <MainContainer>
       <Typography.Title level={1}>Player profiles</Typography.Title>
@@ -40,6 +43,10 @@ const PlayerProfile = () => {
         style={{ width: 200 }}
         value={value}
         setValue={setValue}
+        persistenceOptions={{
+          id: 'player',
+          label: 'player_filter',
+        }}
       />
       {(data && value) && (
         <div>

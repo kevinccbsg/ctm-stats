@@ -5,21 +5,24 @@ import { useEffect, useState } from "react";
 import MatchupProfile from "./components/MatchupProfile/MatchupProfile";
 import MatchupTable from "./components/MatchupTable/MatchupTable";
 import usePlayers from "./hooks/usePlayers";
+import { useSearchParams } from "react-router-dom";
 
 const PlayerVsPlayer = () => {
-  const [value, setValue] = useState<string | null>(null);
-  const [opponent, setOpponent] = useState<string | null>(null);
+  const [searchParams] = useSearchParams({});
+  const [value, setValue] = useState<string | null>(searchParams.get('player_1_filter'));
+  const [opponent, setOpponent] = useState<string | null>(searchParams.get('player_2_filter'));
   const { playersInfo, setPlayers } = usePlayers();
 
   useEffect(() => {
-    if (value && opponent) {
-      setPlayers(+value, +opponent)
+    const urlPlayer1 = searchParams.get('player_1');
+    const urlPlayer2 = searchParams.get('player_2');
+    if (urlPlayer1 && urlPlayer2) {
+      setPlayers(+urlPlayer1, +urlPlayer2)
         .catch(error => {
           console.log(error);
         });
     }
-  }, [value, opponent, setPlayers]);
-  console.log('re-render');
+  }, [searchParams, setPlayers]);
   
   return (
     <MainContainer>
@@ -29,12 +32,20 @@ const PlayerVsPlayer = () => {
         style={{ width: 200 }}
         value={value}
         setValue={setValue}
+        persistenceOptions={{
+          id: 'player_1',
+          label: 'player_1_filter',
+        }}
       />
       <SearchUser
         placeholder="Search player"
         style={{ width: 200 }}
         value={opponent}
         setValue={setOpponent}
+        persistenceOptions={{
+          id: 'player_2',
+          label: 'player_2_filter',
+        }}
       />
       {playersInfo && (
         <div>

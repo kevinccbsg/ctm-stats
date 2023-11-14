@@ -3,6 +3,7 @@ import { Select } from 'antd';
 import type { SelectProps } from 'antd';
 import { getPlayersList } from '../../api';
 import { SearchOutlined } from '@ant-design/icons';
+import { useSearchParams } from 'react-router-dom';
 
 let timeout: ReturnType<typeof setTimeout> | null;
 let currentValue: string;
@@ -38,9 +39,14 @@ interface Props {
   style: React.CSSProperties;
   value: string | null;
   setValue: (val: string) => void;
+  persistenceOptions?: {
+    id: string;
+    label: string;
+  },
 }
 
-const SearchUser: React.FC<Props> = ({ placeholder, style, value, setValue }) => {
+const SearchUser: React.FC<Props> = ({ placeholder, style, value, setValue, persistenceOptions }) => {
+  const [searchParams, setSearchParams] = useSearchParams({});
   const [data, setData] = useState<SelectProps['options']>([]);
 
   const handleSearch = (newValue: string) => {
@@ -49,6 +55,12 @@ const SearchUser: React.FC<Props> = ({ placeholder, style, value, setValue }) =>
 
   const handleChange = (newValue: string) => {
     setValue(newValue);
+    if (persistenceOptions) {
+      const item = (data || []).find(element => element.value === newValue);
+      searchParams.set(persistenceOptions.id, newValue.toString());
+      searchParams.set(persistenceOptions.label, item?.label?.toString() || '');
+      setSearchParams(searchParams);
+    }
   };
 
   return (
