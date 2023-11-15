@@ -23,7 +23,7 @@ npm i # install dependencies
 npx supabase start # create the supabase environment
 ```
 
-Once you have your supabase containers running if you want to include all the info you have to go to this repository and execute a few commands explained [here](https://github.com/kevinccbsg/ctm-stats-import). **I have plans to integrate all in one repository 😅**
+Once you have your supabase containers running if you want to include all the info you have to go to this repository and execute a few commands explained [here](https://github.com/kevinccbsg/ctm-stats-import). *I have plans to integrate all in one repository 😅*
 
 ## Run project
 
