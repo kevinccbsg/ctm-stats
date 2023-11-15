@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Avatar, Table, Typography } from 'antd';
+import { Avatar, Table, Typography, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { UserOutlined } from '@ant-design/icons';
 
@@ -48,6 +48,7 @@ interface Props {
 }
 
 const LifetimeStats = ({ getStatsMethod, title }: Props) => {
+  const [messageApi, contextHolder] = message.useMessage();
   const [data, setData] = useState<DataType[]>([]);
   useEffect(() => {
     getStatsMethod()
@@ -57,12 +58,16 @@ const LifetimeStats = ({ getStatsMethod, title }: Props) => {
           key: value.id,
         })));
       })
-      .catch(error => {
-        console.log(error);
+      .catch(() => {
+        messageApi.open({
+          type: 'error',
+          content: 'Error fetching results'
+        });
       });
-  }, [getStatsMethod]);
+  }, [getStatsMethod, messageApi]);
   return (
     <div>
+      {contextHolder}
       <Typography.Title level={4} style={{ minHeight: 68 }}>{title}</Typography.Title>
       <Table
         showHeader={false}

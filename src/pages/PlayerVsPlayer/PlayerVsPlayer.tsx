@@ -1,4 +1,4 @@
-import { Typography } from "antd";
+import { Typography, message } from "antd";
 import MainContainer from "../../Layouts/MainContainer/MainContainer";
 import SearchUser from "../../components/SearchUser/SearchUser";
 import { useEffect, useState } from "react";
@@ -8,6 +8,7 @@ import usePlayers from "./hooks/usePlayers";
 import { useSearchParams } from "react-router-dom";
 
 const PlayerVsPlayer = () => {
+  const [messageApi, contextHolder] = message.useMessage();
   const [searchParams] = useSearchParams({});
   const [value, setValue] = useState<string | null>(searchParams.get('player_1_filter'));
   const [opponent, setOpponent] = useState<string | null>(searchParams.get('player_2_filter'));
@@ -18,14 +19,18 @@ const PlayerVsPlayer = () => {
     const urlPlayer2 = searchParams.get('player_2');
     if (urlPlayer1 && urlPlayer2) {
       setPlayers(+urlPlayer1, +urlPlayer2)
-        .catch(error => {
-          console.log(error);
+        .catch(() => {
+          messageApi.open({
+            type: 'error',
+            content: 'Error fetching match info'
+          });
         });
     }
-  }, [searchParams, setPlayers]);
+  }, [searchParams, setPlayers, messageApi]);
   
   return (
     <MainContainer>
+      {contextHolder}
       <Typography.Title level={1}>Head to Head Record in the CTM Masters Event</Typography.Title>
       <SearchUser
         placeholder="Search player"

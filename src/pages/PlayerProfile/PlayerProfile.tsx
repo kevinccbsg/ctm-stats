@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { userStats } from "../../api";
 import MainContainer from "../../Layouts/MainContainer/MainContainer";
-import { Avatar, Typography } from "antd";
+import { Avatar, Typography, message } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import SearchUser from "../../components/SearchUser/SearchUser";
 import UserResultTable from "../../components/UserResultTable/UserResultTable";
@@ -22,6 +22,7 @@ interface Data {
 }
 
 const PlayerProfile = () => {
+  const [messageApi, contextHolder] = message.useMessage();
   const [searchParams] = useSearchParams({});
   const [data, setData] = useState<Data>();
   const [value, setValue] = useState<string | null>(searchParams.get('player_filter'));
@@ -32,11 +33,17 @@ const PlayerProfile = () => {
         .then(data => {
           setData(data);
         })
-        .catch(error => console.log(error))
+        .catch(() => {
+          messageApi.open({
+            type: 'error',
+            content: 'Error fetching user info'
+          });
+        });
     }
-  }, [searchParams]);
+  }, [searchParams, messageApi]);
   return (
     <MainContainer>
+      {contextHolder}
       <Typography.Title level={1}>Player profiles</Typography.Title>
       <SearchUser
         placeholder="Search player"

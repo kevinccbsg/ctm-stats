@@ -36,7 +36,7 @@ export const getScores = async (type: EScores): Promise<Score[]> => {
     .order(type, { ascending: false })
     .limit(10)
     .returns<GameResult[] | null>();
-  console.log(error);
+  if (error) throw new Error(error.details);
   if (!results) return [];
   return results.map(result => ({
     id: result.id,
@@ -65,7 +65,7 @@ export const lifetimeStats = async (stat: LifeTimeStatistic, prefix = ''): Promi
   const { data, error } = await supabase.rpc('lifetime_stats')
     .order(stat, { ascending: false })
     .limit(10);
-  console.log(error);
+  if (error) throw new Error(error.details);
   if (!data) return [];
   return data.map(item => ({
     id: item.id,
@@ -79,7 +79,7 @@ export const yearStats = async (stat: LifeTimeStatistic, year: number, prefix = 
   const { data, error } = await supabase.rpc('year_stats', { event_year_param: year })
     .order(stat, { ascending: false })
     .limit(10);
-  console.log(error);
+  if (error) throw new Error(error.details);
   if (!data) return [];
   return data.map(item => ({
     id: item.id,
@@ -97,7 +97,7 @@ export const userStats = async (playerId: number) => {
     .not('final_score', 'is', null)
     .order('final_score', { ascending: false })
     .returns<GameResult[] | null>();
-  console.log(error);
+  if (error) throw new Error(error.details);
   if (!data) throw new Error(`Player ${playerId} not found`);
   return {
     results: data.map(result => ({
@@ -119,7 +119,7 @@ export const getPlayersList =async (name: string) => {
     `)
     .ilike('name', `%${name}%`)
     .order('name', { ascending: false });
-  console.log(error);
+  if (error) throw new Error(error.details);
   if (!data) return [];
   return data;
 };
@@ -138,7 +138,7 @@ export const getPlayers = async (playerId: number, opponentId: number) => {
       profile_picture_url
     `)
     .in('id', [playerId, opponentId]);
-  console.log(error);
+  if (error) throw new Error(error.details);
   if (!data) throw new Error(`Player ${playerId} and ${opponentId} not found`);
   return {
     player: data.find(({ id }) => id === playerId) as Player,
@@ -151,7 +151,7 @@ export const playerVsPlayer = async (playerId: number, opponentId: number) => {
     player1_id: playerId,
     player2_id: opponentId,
   })
-  console.log(error);
+  if (error) throw new Error(error.details);
   if (!data) return [];
   return data;
 };

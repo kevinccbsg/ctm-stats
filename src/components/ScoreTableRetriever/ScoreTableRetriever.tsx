@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import ScoreTable from '../ScoreTable/ScoreTable';
+import { message } from 'antd';
 
 interface DataType {
   key: React.Key;
@@ -17,6 +18,7 @@ interface Props {
 }
 
 const ScoreTableRetriever = ({ getStatsMethod, title }: Props) => {
+  const [messageApi, contextHolder] = message.useMessage();
   const [data, setData] = useState<DataType[]>([]);
   useEffect(() => {
     getStatsMethod()
@@ -26,12 +28,18 @@ const ScoreTableRetriever = ({ getStatsMethod, title }: Props) => {
           key: value.id,
         })));
       })
-      .catch(error => {
-        console.log(error);
+      .catch(() => {
+        messageApi.open({
+          type: 'error',
+          content: 'Error fetching results'
+        });
       });
-  }, [getStatsMethod]);
+  }, [getStatsMethod, messageApi]);
   return (
-    <ScoreTable title={title} data={data} />
+    <>
+      {contextHolder}
+      <ScoreTable title={title} data={data} />
+    </>
   );
 };
 

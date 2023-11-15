@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { playerVsPlayer } from "../../../../api";
 import PvPTable, { DataType } from "../../../../components/PvPTable/PvPTable";
+import { message } from "antd";
 
 interface Player {
   id: number;
@@ -14,6 +15,7 @@ interface Props {
 }
 
 const MatchupTable = ({ player, opponent }: Props) => {
+  const [messageApi, contextHolder] = message.useMessage();
   const [results, setResults] = useState<DataType[]>([]);
 
   useEffect(() => {
@@ -34,15 +36,23 @@ const MatchupTable = ({ player, opponent }: Props) => {
         }))
         setResults(formatResults);
       })
-      .catch(error => console.log(error))
-  }, [player.id, opponent.id]);
+      .catch(() => {
+        messageApi.open({
+          type: 'error',
+          content: 'Error fetching match results'
+        });
+      })
+  }, [player.id, opponent.id, messageApi]);
 
   return (
-    <PvPTable
-      playerA={player.name}
-      playerB={opponent.name}
-      data={results}
-    />
+    <>
+      {contextHolder}
+      <PvPTable
+        playerA={player.name}
+        playerB={opponent.name}
+        data={results}
+      />
+    </>
   );
 };
 
