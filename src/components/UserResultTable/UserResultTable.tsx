@@ -1,6 +1,6 @@
-import { Table, Typography } from 'antd';
+import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { VideoCameraOutlined } from '@ant-design/icons';
+import { LinkColumn, NumberColumn, TableTitle } from '../TableUtils';
 
 interface DataType {
   key: React.Key;
@@ -16,7 +16,7 @@ const columns: ColumnsType<DataType> = [
     dataIndex: 'index',
     key: 'index',
     width: 75,
-    render: (_val, _record, index) => <Typography.Text strong style={{ color: '#20e128'}}>{index + 1}</Typography.Text>,
+    render: (_val, _record, index) => <NumberColumn value={index + 1} />,
   },
   {
     title: 'Player',
@@ -33,9 +33,7 @@ const columns: ColumnsType<DataType> = [
     key: 'link',
     dataIndex: 'link',
     align: 'right',
-    render: (value: string) => value ? (
-      <a href={value} target='_blank' rel="noopener noreferrer"><VideoCameraOutlined /></a>
-    ): (<span>No link</span>),
+    render: (value: string) => <LinkColumn value={value} />,
   },
 ];
 
@@ -47,7 +45,7 @@ interface Props {
 const UserResultTable = ({ data, title }: Props) => {
   return (
     <div>
-      <Typography.Title style={{ minHeight: 68 }} level={4}>{title}</Typography.Title>
+      <TableTitle title={title} />
       <Table
         showHeader={false}
         pagination={false}

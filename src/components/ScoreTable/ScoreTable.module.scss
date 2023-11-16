@@ -1,0 +1,11 @@
+@use '../../styles/responsive' as r;
+
+.expandable {
+  margin: 0;
+  .link {
+    margin-left: 5px;
+    @include r.tablet {
+      display: none;
+    }
+  }
+}

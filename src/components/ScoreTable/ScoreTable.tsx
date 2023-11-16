@@ -1,6 +1,7 @@
-import { Avatar, Table, Typography } from 'antd';
+import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import styles from './ScoreTable.module.scss';
+import { LinkColumn, NumberColumn, AvatarColumn, TableTitle } from '../TableUtils';
 
 interface DataType {
   key: React.Key;
@@ -18,21 +19,17 @@ const columns: ColumnsType<DataType> = [
     dataIndex: 'index',
     key: 'index',
     width: 50,
-    render: (_val, _record, index) => <Typography.Text strong style={{ color: '#20e128'}}>{index + 1}</Typography.Text>,
+    render: (_val, _record, index) => <NumberColumn value={index + 1} />,
   },
   {
     title: 'Player',
     dataIndex: 'name',
     key: 'name',
-    render: (value, record) => (
-      <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-        <Avatar
-          size={40}
-          src={record.image === '' ? null : record.image}
-          icon={<UserOutlined />}
-        />
-        <Typography.Text strong>{value}</Typography.Text>
-      </div>
+    render: (value: string, record) => (
+      <AvatarColumn
+        image={record.image === '' ? null : record.image}
+        value={value}
+      />
     ),
   },
   {
@@ -46,9 +43,8 @@ const columns: ColumnsType<DataType> = [
     key: 'link',
     dataIndex: 'link',
     align: 'right',
-    render: (value: string) => value ? (
-      <a href={value} target='_blank' rel="noopener noreferrer"><VideoCameraOutlined /></a>
-    ): (<span>No link</span>),
+    responsive: ['md'],
+    render: (value: string) => <LinkColumn value={value} />,
   },
   Table.EXPAND_COLUMN,
 ];
@@ -61,12 +57,17 @@ interface Props {
 const ScoreTable = ({ data, title }: Props) => {
   return (
     <div>
-      <Typography.Title style={{ minHeight: 68 }} level={4}>{title}</Typography.Title>
+      <TableTitle title={title} />
       <Table
         showHeader={false}
         pagination={false}
         expandable={{
-          expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.description}</p>,
+          expandedRowRender: (record) => (
+            <p className={styles.expandable}>
+              {record.description}.
+              <span className={styles.link}><LinkColumn value={record.link} /></span>
+            </p>
+          ),
         }}
         columns={columns}
         dataSource={data.map(value => ({
