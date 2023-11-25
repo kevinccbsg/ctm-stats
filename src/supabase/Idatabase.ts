@@ -196,6 +196,15 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      calculate_combined_median: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          player_fms_id: number
+          player_fms_name: string
+          profile_picture_url: string
+          combined_median: number
+        }[]
+      }
       get_player_v_player_results: {
         Args: {
           player1_id: number

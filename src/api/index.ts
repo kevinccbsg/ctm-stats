@@ -150,9 +150,22 @@ export const playerVsPlayer = async (playerId: number, opponentId: number) => {
   const { data, error } = await supabase.rpc('get_player_v_player_results', {
     player1_id: playerId,
     player2_id: opponentId,
-  })
+  });
   if (error) throw new Error(error.details);
   if (!data) return [];
   return data;
 };
 
+export const medianScore = async () => {
+  const { data, error } = await supabase.rpc('calculate_combined_median')
+    .limit(10)
+    .order('combined_median', { ascending: false });
+  if (error) throw new Error(error.details);
+  if (!data) return [];
+  return data.map(item => ({
+    id: item.player_fms_id,
+    name: item.player_fms_name,
+    image: item.profile_picture_url,
+    value: item.combined_median.toLocaleString(),
+  }));
+};

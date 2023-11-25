@@ -3,7 +3,7 @@ import LifetimeStats from '../../components/LifetimeStatsTable/LifetimeStatsTabl
 import ScoreTableRetriever from '../../components/ScoreTableRetriever/ScoreTableRetriever';
 import MainContainer from '../../Layouts/MainContainer/MainContainer';
 import StatsGrid from '../../Layouts/StatsGrid/StatsGrid';
-import { getScores, LifeTimeStatistic, lifetimeStats } from '../../api';
+import { getScores, LifeTimeStatistic, lifetimeStats, medianScore } from '../../api';
 import { EScores } from '../../api/api.model';
 
 const Homepage = () => {
@@ -34,6 +34,10 @@ const Homepage = () => {
         <LifetimeStats
           title="Lifetime Total Maxouts"
           getStatsMethod={() => lifetimeStats(LifeTimeStatistic.MAXOUT_GAMES)}
+        />
+        <LifetimeStats
+          title="Lifetime Fair Median Score"
+          getStatsMethod={() => medianScore()}
         />
       </StatsGrid>
     </MainContainer>
