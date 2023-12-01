@@ -3,7 +3,7 @@ import LifetimeStats from '../../components/LifetimeStatsTable/LifetimeStatsTabl
 import ScoreTableRetriever from '../../components/ScoreTableRetriever/ScoreTableRetriever';
 import MainContainer from '../../Layouts/MainContainer/MainContainer';
 import StatsGrid from '../../Layouts/StatsGrid/StatsGrid';
-import { getScores, LifeTimeStatistic, lifetimeStats, medianScore } from '../../api';
+import { getScores, LifeTimeStatistic, lifetimeStats, medianScore, fair19Percentage, fair29Percentage, fairMedianTrans19, fairMedianTrans29 } from '../../api';
 import { EScores } from '../../api/api.model';
 
 const Homepage = () => {
@@ -38,6 +38,22 @@ const Homepage = () => {
         <LifetimeStats
           title="Lifetime Fair Median Score"
           getStatsMethod={() => medianScore()}
+        />
+        <LifetimeStats
+          title="Lifetime Fair 19 Percentage"
+          getStatsMethod={() => fair19Percentage()}
+        />
+        <LifetimeStats
+          title="Lifetime Fair 29 Percentage"
+          getStatsMethod={() => fair29Percentage()}
+        />
+        <LifetimeStats
+          title="Lifetime Fair 19 Percentage"
+          getStatsMethod={() => fairMedianTrans19()}
+        />
+        <LifetimeStats
+          title="Lifetime Fair 29 Percentage"
+          getStatsMethod={() => fairMedianTrans29()}
         />
       </StatsGrid>
     </MainContainer>

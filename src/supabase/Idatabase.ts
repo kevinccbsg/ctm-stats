@@ -67,6 +67,48 @@ export interface Database {
           }
         ]
       }
+      median_trans_19: {
+        Row: {
+          id: number | null
+          name: string | null
+          percentile_cont: number | null
+          profile_picture_url: string | null
+        }
+        Insert: {
+          id?: number | null
+          name?: string | null
+          percentile_cont?: number | null
+          profile_picture_url?: string | null
+        }
+        Update: {
+          id?: number | null
+          name?: string | null
+          percentile_cont?: number | null
+          profile_picture_url?: string | null
+        }
+        Relationships: []
+      }
+      median_value: {
+        Row: {
+          id: number | null
+          name: string | null
+          percentile_cont: number | null
+          profile_picture_url: string | null
+        }
+        Insert: {
+          id?: number | null
+          name?: string | null
+          percentile_cont?: number | null
+          profile_picture_url?: string | null
+        }
+        Update: {
+          id?: number | null
+          name?: string | null
+          percentile_cont?: number | null
+          profile_picture_url?: string | null
+        }
+        Relationships: []
+      }
       players: {
         Row: {
           id: number
@@ -203,6 +245,42 @@ export interface Database {
           player_fms_name: string
           profile_picture_url: string
           combined_median: number
+        }[]
+      }
+      fair_19_percentage: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          player_id: number
+          player_name: string
+          profile_picture_url: string
+          percentage: number
+        }[]
+      }
+      fair_29_percentage: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          player_id: number
+          player_name: string
+          profile_picture_url: string
+          percentage: number
+        }[]
+      }
+      fair_median_trans_19: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          player_id: number
+          player_name: string
+          profile_picture_url: string
+          median_trans_19: number
+        }[]
+      }
+      fair_median_trans_29: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          player_id: number
+          player_name: string
+          profile_picture_url: string
+          median_trans_29: number
         }[]
       }
       get_player_v_player_results: {

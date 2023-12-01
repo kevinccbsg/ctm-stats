@@ -169,3 +169,61 @@ export const medianScore = async () => {
     value: item.combined_median.toLocaleString(),
   }));
 };
+
+export const fair19Percentage = async () => {
+  const { data, error } = await supabase.rpc('fair_19_percentage')
+    .limit(10)
+    .order('percentage', { ascending: false });
+  if (error) throw new Error(error.details);
+  if (!data) return [];
+  return data.map(item => ({
+    id: item.player_id,
+    name: item.player_name,
+    image: item.profile_picture_url,
+    value: `${item.percentage}%`,
+  }));
+};
+
+export const fair29Percentage = async () => {
+  const { data, error } = await supabase.rpc('fair_29_percentage')
+    .limit(10)
+    .order('percentage', { ascending: false });
+  if (error) throw new Error(error.details);
+  if (!data) return [];
+  return data.map(item => ({
+    id: item.player_id,
+    name: item.player_name,
+    image: item.profile_picture_url,
+    value: `${item.percentage}%`,
+  }));
+};
+
+export const fairMedianTrans19 = async () => {
+  const { data, error } = await supabase.rpc('fair_median_trans_19')
+    .limit(10)
+    .not('median_trans_19', 'is', null)
+    .order('median_trans_19', { ascending: false });
+  if (error) throw new Error(error.details);
+  if (!data) return [];
+  return data.map(item => ({
+    id: item.player_id,
+    name: item.player_name,
+    image: item.profile_picture_url,
+    value: item.median_trans_19.toLocaleString(),
+  }));
+};
+
+export const fairMedianTrans29 = async () => {
+  const { data, error } = await supabase.rpc('fair_median_trans_29')
+    .limit(10)
+    .not('median_trans_29', 'is', null)
+    .order('median_trans_29', { ascending: false });
+  if (error) throw new Error(error.details);
+  if (!data) return [];
+  return data.map(item => ({
+    id: item.player_id,
+    name: item.player_name,
+    image: item.profile_picture_url,
+    value: item.median_trans_29.toLocaleString(),
+  }));
+};
