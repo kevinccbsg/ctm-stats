@@ -1,5 +1,8 @@
+## Lifetime stats
+
+Includes **games_won**, **maxout_games**, **total_games** and **winning_percentage**. This is being used in the home page.
+
 ```sql
--- lifetime_stats
 CREATE OR REPLACE FUNCTION lifetime_stats()
 RETURNS TABLE (
   id INT,
@@ -34,6 +37,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 ```
+
+## Year stats
+
+Includes **games_won**, **maxout_games**, **total_games** and **winning_percentage**. This is being used in the 2023 stats and custom leaderboards page. I has a filter by year.
+
+TODO(idea): Maybe we could used this query instead the previous one adding all years in the filter.
 
 ```sql
 --- year stats, sames as previous one but with a year filter
@@ -77,6 +86,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 ```
+
+## Palyer VS Player
+
+Table to compare 2 players matchups.
 
 ```sql
 -- player vs player function
@@ -130,9 +143,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 ```
+## Fair median score
 
+FMS = Median of all Natural Topouts + Intentional/Aggressive Topouts above the Median.  F19/29% = Percentage of games reaching 19/29, discarding prior Intentional Topouts.
 
 ```sql
+-- fair median score
 CREATE OR REPLACE FUNCTION calculate_combined_median()
 RETURNS TABLE (
     player_id INTEGER,
@@ -189,6 +205,135 @@ BEGIN
         cv.player_id;
 
     RETURN;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+## Fair 19%
+
+Fair 19 Transition % - Percentage of Games that made it to 19, excludes intentional topouts before 19
+
+```sql
+-- fair 19%
+CREATE OR REPLACE FUNCTION fair_19_percentage()
+RETURNS TABLE (
+    player_id INT,
+    player_name VARCHAR(255),
+    profile_picture_url TEXT,
+    percentage NUMERIC
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        p.id AS player_id,
+        p.name AS player_name,
+        p.profile_picture_url AS profile_picture_url,
+        ROUND((
+            COUNT(CASE WHEN t.trans_19 > 0 AND t.level_start < 19 THEN 1 END)::decimal
+            /
+            (COUNT(CASE WHEN t.level_start < 19 THEN 1 END) - COUNT(CASE WHEN t.topout_type = 'Intentional' AND t.trans_19 IS NULL AND t.level_start < 19 THEN 1 END))
+        ) * 100, 1)::NUMERIC AS percentage
+    FROM
+        public.players p
+    JOIN
+        public.tetris_games t ON p.id = t.player_id
+    GROUP BY
+        p.id, p.name, p.profile_picture_url;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+## Fair 29%
+
+Fair 29 Transition % - Percentage of games that make it to Level 29, intentional topouts before 29 excluded.
+
+```sql
+CREATE OR REPLACE FUNCTION fair_29_percentage()
+RETURNS TABLE (
+    player_id INT,
+    player_name VARCHAR(255),
+    profile_picture_url TEXT,
+    percentage NUMERIC
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        p.id AS player_id,
+        p.name AS player_name,
+        p.profile_picture_url AS profile_picture_url,
+        ROUND((
+            COUNT(CASE WHEN t.trans_29 > 0 AND t.level_start < 19 THEN 1 END)::decimal
+            /
+            (COUNT(CASE WHEN t.level_start < 19 THEN 1 END) - COUNT(CASE WHEN t.topout_type = 'Intentional' AND t.trans_29 IS NULL AND t.level_start < 19 THEN 1 END))
+        ) * 100, 1)::NUMERIC AS percentage
+    FROM
+        public.players p
+    JOIN
+        public.tetris_games t ON p.id = t.player_id
+    GROUP BY
+        p.id, p.name, p.profile_picture_url;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+## Median 19 transition score - M19T
+
+Median 19 transition score (topout type is not relevant here) - Excludes Faster Masters where every 19 transition was 0 points
+
+```sql
+CREATE OR REPLACE FUNCTION fair_median_trans_19()
+RETURNS TABLE (
+    player_id INT,
+    player_name VARCHAR(255),
+    profile_picture_url TEXT,
+    median_trans_19 NUMERIC
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+      p.id AS player_id,
+      p.name AS player_name,
+      p.profile_picture_url,
+      (PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY tg.trans_19))::numeric AS median_trans_19
+    FROM
+      tetris_games tg
+    JOIN
+      players p ON tg.player_id = p.id
+    WHERE
+      tg.level_start < 19 AND tg.trans_19 IS NOT NULL
+    GROUP BY
+      p.id, p.name, p.profile_picture_url;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+## Median 19 transition score - M29T
+
+Median 29 Transition Score (topout type isn't relevant here) - Excludes Faster Masters where scores were much lower due to skipping the lines on level 18.
+
+```sql
+CREATE OR REPLACE FUNCTION fair_median_trans_29()
+RETURNS TABLE (
+    player_id INT,
+    player_name VARCHAR(255),
+    profile_picture_url TEXT,
+    median_trans_29 NUMERIC
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+      p.id AS player_id,
+      p.name AS player_name,
+      p.profile_picture_url,
+      (PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY tg.trans_29))::numeric AS median_trans_29
+    FROM
+      tetris_games tg
+    JOIN
+      players p ON tg.player_id = p.id
+    WHERE
+      tg.level_start < 19 AND tg.trans_19 IS NOT NULL
+    GROUP BY
+      p.id, p.name, p.profile_picture_url;
 END;
 $$ LANGUAGE plpgsql;
 ```
