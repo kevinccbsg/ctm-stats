@@ -48,11 +48,11 @@ const Homepage = () => {
           getStatsMethod={() => fair29Percentage()}
         />
         <LifetimeStats
-          title="Lifetime Fair 19 Percentage"
+          title="Lifetime Median 19 Transition"
           getStatsMethod={() => fairMedianTrans19()}
         />
         <LifetimeStats
-          title="Lifetime Fair 29 Percentage"
+          title="Lifetime Median 29 Transition"
           getStatsMethod={() => fairMedianTrans29()}
         />
       </StatsGrid>
