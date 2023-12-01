@@ -151,18 +151,19 @@ FMS = Median of all Natural Topouts + Intentional/Aggressive Topouts above the M
 -- fair median score
 CREATE OR REPLACE FUNCTION calculate_combined_median()
 RETURNS TABLE (
-    player_id INTEGER,
-    player_name VARCHAR(255),
+    player_fms_id INTEGER,
+    player_fms_id TEXT,
+    profile_picture_url TEXT,
     combined_median NUMERIC
 ) AS $$
 BEGIN
     RETURN QUERY
     WITH natural_topouts AS (
         SELECT
-            player_id,
+            tg.player_id,
             PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY final_score) AS median_final_score
         FROM
-            public.tetris_games
+            public.tetris_games AS tg
         WHERE
             topout_type = 'Natural' AND level_start = 18
         GROUP BY
@@ -170,10 +171,10 @@ BEGIN
     ),
     natural_items AS (
         SELECT
-            player_id,
+            tg.player_id,
             final_score
         FROM
-            public.tetris_games
+            public.tetris_games AS tg
         WHERE
             level_start = 18 AND topout_type = 'Natural'
     ),
@@ -194,16 +195,16 @@ BEGIN
         SELECT player_id, average_final_score AS combined_value FROM intentional_aggressive_topouts
     )
     SELECT
-        cv.player_id,
-        MAX(p.name) AS player_name,
-        PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY combined_value) AS combined_median
+        cv.player_id AS player_fms_id,
+        MAX(p.name) AS player_fms_name,
+        MAX(p.profile_picture_url) AS profile_picture_url,
+        (PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY combined_value))::numeric AS combined_median
     FROM
         combined_values cv
     LEFT JOIN
         players p ON p.id = cv.player_id
     GROUP BY
         cv.player_id;
-
     RETURN;
 END;
 $$ LANGUAGE plpgsql;
